@@ -63,7 +63,7 @@ def ticker_returns(tick, day0, day1):
 tick_table = pd.read_excel('biotechs.xlsx')
 tickers = tick_table['Ticker'].tolist()
 today = dt.datetime.today()
-today =today.replace(day=today.day-1, hour=23)
+today =today.replace(day=31, month=today.month-1, hour=23)
 yesterday =today.replace(day=today.day-5)
 
 returns = {}

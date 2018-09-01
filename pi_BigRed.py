@@ -47,7 +47,7 @@ def ticker_returns(tick, day0, day1):
     money_change = day1_close-day0_close
     vol = temp_frame.loc[day1.date()]['Volume']
     points = [day1_close, money_change, percent_change, int(vol)]
-    
+
     return points
 
 def golden_retreiver():
@@ -59,10 +59,10 @@ def golden_retreiver():
 
     returns = {} #create a dictionary to store data retreived
     for tic in tickers:
-        returns[tic] = ticker_returns(tic, yesterday, today) 
-    
+        returns[tic] = ticker_returns(tic, yesterday, today)
+
     #create a pandas dataframe from the dictionary
-    df = pd.DataFrame.from_dict(returns, orient='index', 
+    df = pd.DataFrame.from_dict(returns, orient='index',
                                columns=['Close', '\u0394$', '\u0394%','Volume'])
     sortdf = df.sort_values(by='\u0394%') #sort by %change, ascending, and save to new df
     decimals = pd.Series([2, 2, 3, 0], index=['Close', '\u0394$', '\u0394%','Volume']) #simplify display by rounding
@@ -78,12 +78,12 @@ def fig_creator(data_frame): #bring in sorthead as the data_frame
     tabla.auto_set_font_size(False) # Activate set fontsize manually
     tabla.set_fontsize(15) # if ++fontsize is necessary ++colWidths
     tabla.scale(1.5, 1.5) # change size table
-    plt.savefig(f'{today.date()}_losers.png', transparent=True,bbox_inches='tight', dpi=300, pad_inches=0)
+    plt.savefig(f'images/{today.date()}_losers.png', transparent=True,bbox_inches='tight', dpi=300, pad_inches=0)
 
 
 #tweet photo and tickers
 def tweet():
     tweet_phrase = ', '.join(['$'+i for i in sorthead.index.tolist()])
-    photo = open(f'{today.date()}_losers.png', 'rb')
+    photo = open(f'images/{today.date()}_losers.png', 'rb')
     response = twitter.upload_media(media=photo)
     twitter.update_status(status=f'Big Red on {today.date()}:\n{tweet_phrase}', media_ids=[response['media_id']])
